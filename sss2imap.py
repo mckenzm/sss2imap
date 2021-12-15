@@ -29,7 +29,7 @@ with IMAP4_SSL(host=imapHost,port=imapPort) as M:
     M.select(mailbox=imapMailbox,readonly=False)
 
     for key in conn.list_objects(Bucket=bucketName, Prefix=prefixName)['Contents']:  # max 1000, but running frequently.
-        if key['Key'][6:12] != 'AMAZON':                                             # leave or the above crashes if folder removed.
+        if 'AMAZON' not in key['Key']:                                             # leave or the above crashes if folder removed.
             conn.download_fileobj(Bucket=bucketName, Key=key['Key'], Fileobj=bytes_buffer)
             byte_value = bytes_buffer.getvalue()                                     # stay in bytes, no need to .decode()
             headers = BytesParser(policy=default).parsebytes(byte_value,headersonly=True)
