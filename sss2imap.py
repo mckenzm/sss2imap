@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """ 
     https://stackoverflow.com/a/30262449/1734032
     https://docs.python.org/3/library/imaplib.html
