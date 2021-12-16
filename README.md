@@ -20,12 +20,8 @@ This is a good starting point in any case.
 
 **To consider.**
 
-The process will fetch tranches of up to 999 emails, currently it does not repeat to empty (bar 1) the bucket.
 It always fetches the sentinel.
 Locking is not considered. There should only be one client?
-Nor does it report 1000 records were fetched. Counters then.
-Better logging.
-Arguments.
-Separately def'd function for the "secrets" from a config file.
+Arguments or separately def'd function for the "secrets" from a config file.
 /etc  integration, man page - all beyond the scope of a proof of concept.
 Re-write in bash? in C?
