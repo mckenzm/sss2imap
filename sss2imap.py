@@ -12,6 +12,7 @@ from boto3        import client
 from imaplib      import IMAP4_SSL
 from email.parser import BytesParser, Parser
 from email.policy import default
+from datetime     import datetime
 
 bucketName  = ""                   #maybe fn() to read from a config file to load these up.
 prefixName  = ""                   #enhancement to loop on each found is nice to have. 
@@ -20,6 +21,10 @@ imapPass    = ""
 imapHost    = ""
 imapPort    = "993"                #default for SSL, important if different  
 imapMailbox = "INBOX"
+
+dateTimeObj = datetime.now()
+timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H.%M.%S.%f")
+print("Invoked", timestampStr)
 
 conn = client('s3')  # assumes boto.cfg setup, assume AWS S3
 bytes_buffer = BytesIO()
@@ -60,6 +65,7 @@ with IMAP4_SSL(host=imapHost,port=imapPort) as M:
         if count < 1000:
             finished = True
             count    = 0
-
+    
+    print("logging off...")
     M.close()
     M.logout()
