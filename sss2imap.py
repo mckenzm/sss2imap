@@ -1,13 +1,13 @@
-#!/usr/bin/python
-""" 
+#!/usr/bin/python3
+"""
     https://stackoverflow.com/a/30262449/1734032
     https://docs.python.org/3/library/imaplib.html
-    
+
     Need args. Parametise the change-ey things like prefix or probe for all prefixes (major enhancement and new loop ?)
     care to create folder, if first email creates, last removes it? .. or leave SES message as sentinel.
     Need also to check append response.
 """
-from io           import BytesIO 
+from io           import BytesIO
 from boto3        import client
 from imaplib      import IMAP4_SSL
 from email.parser import BytesParser, Parser
@@ -21,6 +21,7 @@ imapPass    = ""
 imapHost    = ""
 imapPort    = "993"                #default for SSL, important if different  
 imapMailbox = "INBOX"
+
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H.%M.%S.%f")
@@ -38,12 +39,12 @@ with IMAP4_SSL(host=imapHost,port=imapPort) as M:
     finished = False
     count    = 0
     total    = 0
-    
+
     while not finished:
 
         print("Fetching from S3 bucket...")
-        print(" ")
-        
+        print("*")
+
         for key in conn.list_objects(Bucket=bucketName, Prefix=prefixName)['Contents']:  # max 1000, but running frequently.
 
             count = count + 1;
@@ -56,16 +57,17 @@ with IMAP4_SSL(host=imapHost,port=imapPort) as M:
                 print('To     : {}'.format(headers['to']))
                 print('From   : {}'.format(headers['from']))
                 print('Subject: {}'.format(headers['subject']))
-                print(' ')
-                rc = M.append(imapMailbox,'','',byte_value)        #send it, should really test in case of quota.               
+                print('*')
+                rc = M.append(imapMailbox,'','',byte_value)        #send it, should really test in case of quota.
                 # check response from above? Delete from bucket.
                 if rc[0] == 'OK':
                     conn.delete_object(Bucket=bucketName, Key=key['Key'])
-  
+
         if count < 1000:
             finished = True
             count    = 0
-    
-    print("logging off...")
+
+    print("Logging off...")
+    print("-----------------------------------")
     M.close()
     M.logout()
