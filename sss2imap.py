@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 """
+    Pop 
+    
     https://stackoverflow.com/a/30262449/1734032
     https://docs.python.org/3/library/imaplib.html
 
     Need args. Parametise the change-ey things like prefix or probe for all prefixes (major enhancement and new loop ?)
     care to create folder, if first email creates, last removes it? .. or leave SES message as sentinel.
-    Need also to check append response.
+    
 """
 from io           import BytesIO
 from boto3        import client
@@ -21,7 +23,6 @@ imapPass    = ""
 imapHost    = ""
 imapPort    = "993"                #default for SSL, important if different  
 imapMailbox = "INBOX"
-
 
 dateTimeObj = datetime.now()
 timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H.%M.%S.%f")
