@@ -24,7 +24,7 @@ prefixName  = ""                   #enhancement to loop on each found is nice to
 imapUser    = ""
 imapPass    = ""
 imapHost    = ""
-imapPort    = "993"                #default for SSL, important if different  
+imapPort    = 993                #default for SSL, important if different  
 imapMailbox = "INBOX"
 
 dateTimeObj = datetime.now()
@@ -51,9 +51,9 @@ with IMAP4_SSL(host=imapHost,port=imapPort) as M:
 
         for key in conn.list_objects(Bucket=bucketName, Prefix=prefixName)['Contents']:  # max 1000, but running frequently.
 
-            count = count + 1;
+            count = count + 1
             if 'AMAZON' not in key['Key']:   # leave or the above crashes if folder removed.
-                total = total + 1;
+                total = total + 1
                 conn.download_fileobj(Bucket=bucketName, Key=key['Key'], Fileobj=bytes_buffer)
                 byte_value = bytes_buffer.getvalue()                                     # stay in bytes, no need to .decode()
                 headers = BytesParser(policy=default).parsebytes(byte_value,headersonly=True)
