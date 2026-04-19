@@ -46,15 +46,21 @@ with IMAP4_SSL(host=imapHost, port=imapPort) as M:
             bytes_buffer = BytesIO()
             conn.download_fileobj(Bucket=bucketName, Key=key['Key'], Fileobj=bytes_buffer)
             byte_value = bytes_buffer.getvalue()
-            headers = BytesParser(policy=default).parsebytes(byte_value, headersonly=True)
-            print('Date   : {}'.format(headers['date']))
-            print('To     : {}'.format(headers['to']))
-            print('From   : {}'.format(headers['from']))
-            print('Subject: {}'.format(headers['subject']))
+            msg = BytesParser(policy=default).parsebytes(byte_value)
+            print('Date   : {}'.format(msg['date']))
+            print('To     : {}'.format(msg['to']))
+            print('From   : {}'.format(msg['from']))
+            print('Subject: {}'.format(msg['subject']))
+
+            body_part = msg.get_body(preferencelist=('plain',))
+            if body_part:
+                text = body_part.get_content().strip()
+                if text:
+                    print('\n'.join(text.splitlines()[:10]))
             print('*')
 
             try:
-                imap_date = Time2Internaldate(parsedate_to_datetime(headers['date'])) if headers['date'] else None
+                imap_date = Time2Internaldate(parsedate_to_datetime(msg['date'])) if msg['date'] else None
             except Exception:
                 imap_date = None
 
