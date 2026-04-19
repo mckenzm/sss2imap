@@ -40,7 +40,7 @@ with IMAP4_SSL(host=imapHost, port=imapPort) as M:
 #   print("Selecting mailbox...")
     M.select(mailbox=imapMailbox, readonly=False)
 
-    for key in conn.list_objects(Bucket=bucketName, Prefix=prefixName)['Contents']:
+    for key in conn.list_objects_v2(Bucket=bucketName, Prefix=prefixName)['Contents']:
 
         if 'AMAZON' not in key['Key']:   # leave sentinel or the above crashes if folder removed.
             bytes_buffer = BytesIO()
